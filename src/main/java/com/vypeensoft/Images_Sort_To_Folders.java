@@ -48,9 +48,14 @@ public class Images_Sort_To_Folders {
 			  String parentFolderName = parentFolder.getName();
 			  String name = sourceFile.getName();
 			  System.out.println("name = "+name );
-			  if(name.startsWith("IMG_") || name.startsWith("VID_")) {
+			  if(name.startsWith("IMG_") || name.startsWith("VID_") || name.startsWith("201")) {
 				  //get date
-				  int startIndex = name.indexOf("_");
+				  int startIndex = -1;
+				  if(name.startsWith("IMG_") || name.startsWith("VID_")) {
+				      startIndex = name.indexOf("_");
+				  } else {
+					  startIndex = 0;
+				  }
 				  int endIndex   = name.indexOf("_", startIndex+1);
 				  String dateStr = name.substring(startIndex+1, endIndex);
 				  System.out.println("dateStr="+dateStr);
