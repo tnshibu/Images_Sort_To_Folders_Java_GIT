@@ -47,40 +47,52 @@ public class Images_Sort_To_Folders {
 			  File parentFolder = sourceFile.getParentFile();
 			  String parentFolderName = parentFolder.getName();
 			  String name = sourceFile.getName();
-			  System.out.println("name = "+name );
-			  if(name.startsWith("IMG_") || name.startsWith("VID_") || name.startsWith("201")) {
-				  //get date
-				  int startIndex = -1;
-				  if(name.startsWith("IMG_") || name.startsWith("VID_")) {
-				      startIndex = name.indexOf("_");
-				  } else {
-					  startIndex = 0;
-				  }
-				  int endIndex   = name.indexOf("_", startIndex+1);
-				  String dateStr = name.substring(startIndex+1, endIndex);
-				  System.out.println("dateStr="+dateStr);
-				  if(dateStr.length() == 8) {
-					  StringBuffer dateStrSB = new StringBuffer(dateStr);
-					  dateStrSB.insert(6,"-");
-					  dateStrSB.insert(4,"-");
-					  System.out.println("dateStrSB="+dateStrSB);
-					  dateStr = dateStrSB.toString();
-				  }
-				  System.out.println("parentFolderName="+parentFolderName);
-				  
-				  if(parentFolderName.contains(dateStr)) {
-					  //file is already in date named folder
-				  } else {
-					  File newFolder = new File(parentFolder.getAbsolutePath() + "\\" + dateStr);
-					  System.out.println("newFolder="+newFolder);
-					  newFolder.mkdirs();
-					  File destFile = new File(newFolder.getAbsolutePath() + "\\" + name);
-					  System.out.println("destFile="+destFile);
-					  sourceFile.renameTo(destFile);
-				  }
-				  //-------------------------------------
-				  System.out.println("--------------------------------------------------");
+			  String dateStr ="";
+			  if(name.matches("IMG[0-9]*\\.jpg")) {
+				  dateStr = name.substring(3, 11);
 			  }
+			  if(name.matches("IMG[0-9]*\\_01.jpg")) {
+				  dateStr = name.substring(3, 11);
+			  }
+			  if(name.matches("IMG_[0-9]{8}_[0-9]{6}\\.jpg")) {
+				  dateStr = name.substring(4, 12);
+			  }
+			  if(name.matches("IMG_[0-9]{8}_[0-9]{6}_.*\\.jpg")) {
+				  dateStr = name.substring(4, 12);
+			  }
+			  if(name.matches("VID[0-9]*\\.mp4")) {
+				  dateStr = name.substring(3, 11);
+			  }
+			  if(name.matches("VID_[0-9]*\\.mp4")) {
+				  dateStr = name.substring(4, 12);
+			  }
+			  if(dateStr.equals("")) {
+				System.out.println("Unable to determine date : "+name);
+				  continue;
+			  }
+			  if(dateStr.length() == 8) {
+				  StringBuffer dateStrSB = new StringBuffer(dateStr);
+				  dateStrSB.insert(6,"-");
+				  dateStrSB.insert(4,"-");
+				  //System.out.println("dateStrSB="+dateStrSB);
+				  dateStr = dateStrSB.toString();
+			  }
+			  //System.out.println("parentFolderName="+parentFolderName);
+			  
+			  if(parentFolderName.contains(dateStr)) {
+				  //file is already in date named folder
+			  } else {
+				  System.out.println("name = "+name );
+				  System.out.println("dateStr="+dateStr);
+				  File newFolder = new File(parentFolder.getAbsolutePath() + "\\" + dateStr);
+				  //System.out.println("newFolder="+newFolder);
+				  newFolder.mkdirs();
+				  File destFile = new File(newFolder.getAbsolutePath() + "\\" + name);
+				  System.out.println("destFile="+destFile);
+				  sourceFile.renameTo(destFile);
+			  }
+			  //-------------------------------------
+			  System.out.println("--------------------------------------------------");
 		  } catch (Exception e) {
 			  e.printStackTrace();
 		  }
